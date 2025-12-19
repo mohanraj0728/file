@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Photo & Video Upload</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 100vh;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      background-size: 400% 400%;
+      animation: gradientMove 10s ease infinite;
+      color: white;
+    }
+
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .upload-box {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      border-radius: 15px;
+      padding: 30px;
+      text-align: center;
+      width: 300px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    label {
+      display: inline-block;
+      padding: 10px 20px;
+      border-radius: 25px;
+      background: #00e6e6;
+      color: #111;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    label:hover {
+      background: #fff;
+      color: #2575fc;
+      box-shadow: 0 0 15px #00e6e6;
+    }
+
+    .preview {
+      margin-top: 20px;
+      width: 100%;
+      max-height: 200px;
+      border-radius: 10px;
+      overflow: hidden;
+      display: none;
+    }
+
+    .preview img,
+    .preview video {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+
+    .file-info {
+      margin-top: 10px;
+      font-size: 14px;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="upload-box">
+    <h2>Upload Photo / Video</h2>
+    <form id="uploadForm">
+      <input type="file" id="fileInput" accept="image/*,video/*" />
+      <label for="fileInput">Choose File</label>
+      <div class="preview" id="preview"></div>
+      <div class="file-info" id="fileInfo"></div>
+    </form>
+  </div>
+
+  <script>
+    const fileInput = document.getElementById("fileInput");
+    const preview = document.getElementById("preview");
+    const fileInfo = document.getElementById("fileInfo");
+
+    fileInput.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      preview.innerHTML = "";
+      fileInfo.textContent = "";
+
+      if (!file) return;
+
+      const fileType = file.type;
+
+      // Display file info
+      fileInfo.textContent = `File: ${file.name} (${Math.round(file.size / 1024)} KB)`;
+
+      // Preview image or video
+      if (fileType.startsWith("image/")) {
+        const img = document.createElement("img");
+        img.src = URL.createObjectURL(file);
+        preview.appendChild(img);
+      } else if (fileType.startsWith("video/")) {
+        const video = document.createElement("video");
+        video.src = URL.createObjectURL(file);
+        video.controls = true;
+        preview.appendChild(video);
+      }
+
+      preview.style.display = "block";
+    });
+  </script>
+
+</body>
+</html>
